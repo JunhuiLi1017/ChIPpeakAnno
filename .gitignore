@@ -5,3 +5,5 @@
 .Rbuildignore
 .DS_Store
 .Rproj
+.Rdata
+.httr-oauth

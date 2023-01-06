@@ -8,16 +8,10 @@ oligoNucleotideEnrichment(
   filepath,
   format = "fasta",
   peaks,
-  genomeName,
+  genome,
   background = c("randomPick", "shuffle"),
   chromosome = NULL,
-  k = 1,
-  rng.seed = sample.int(10000, 1),
-  method = c("markov", "euler", "linear"),
-  nthreads = 1,
-  window = FALSE,
-  window.size = 0.1,
-  window.overlap = 0.01,
+  ...,
   times = 1000,
   alpha = 0.05
 )
@@ -29,25 +23,13 @@ oligoNucleotideEnrichment(
 
 \item{peaks}{GRanges containing the peaks.}
 
-\item{genomeName}{BSgenome object. Please refer to available.genomes in BSgenome package for details.}
+\item{genome}{BSgenome object or mart object. Please refer to available.genomes in BSgenome package and useMart in bioMaRt package for details}
 
 \item{background}{The method to get the background of compared oligonucleotide. "randomlyPick" (default) or "shuffle".}
 
 \item{chromosome}{Specify which chromosome will be selected to randomly pick back ground sequences. Default is the chromosome in peaks. Note that this parameter is valid for 'randomlyPick' method.}
 
-\item{k}{K-let size, dufault is 1, note that this parameter is valid for 'shuffle' method. See \link[universalmotif:shuffle_sequences]{k} for more information.}
-
-\item{rng.seed}{Set random number generator seed. See \link[universalmotif:shuffle_sequences]{rng.seed} for more information.}
-
-\item{method}{The method of shuffle sequence.'markov' (default),'euler','linear', only relevant if k> 1. See \link[universalmotif:shuffle_sequences]{method} for more information.}
-
-\item{nthreads}{nthreads = 0 uses all available threads. Note that no speed up will occur for jobs with only a single sequence, default is 1, note that this parameter is valid for 'shuffle' method. See \link[universalmotif:shuffle_sequences]{nthreads} for more information.}
-
-\item{window}{Logical value, Shuffle sequences iteratively over windows instead of all at once. Default is FALSE, note that this parameter is valid for 'shuffle' method. See \link[universalmotif:shuffle_sequences]{window} for more information.}
-
-\item{window.size}{Window size. Can be a fraction less than one, or an integer representing the actual window size. Default is 0.01, note that this parameter is valid for 'shuffle' method. See \link[universalmotif:shuffle_sequences]{window.size} for more information.}
-
-\item{window.overlap}{Overlap between windows. Can be a fraction less than one, or an integer representing the actual overlap size. Default is 0.01, note that this parameter is valid for 'shuffle' method. See \link[universalmotif:shuffle_sequences]{window.overlap} for more information.}
+\item{...}{could be parameters of function \code{\link[universalmotif]{shuffle_sequences}}}
 
 \item{times}{The times of getting background sequence for the null distribution, default is 1000}
 
@@ -69,12 +51,12 @@ peaks = GRanges(seqnames=c("chr17","chr3","chr12","chr8"),
                  IRanges(start=c(41275784,10076141,4654135,31024288),
                          end=c(41276382,10076732,4654728,31024996),
                          names=paste0("peak",1:4)))
-
+\dontrun{
 result <- oligoNucleotideEnrichment(filepath=filepath,
 peaks=peaks,
-genomeName=Hsapiens,
+genome=Hsapiens,
 background="randomPick")
-
+}
 }
 \author{
 Junhui Li
