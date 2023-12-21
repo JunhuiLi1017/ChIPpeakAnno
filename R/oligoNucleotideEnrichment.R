@@ -80,7 +80,7 @@ oligoNucleotideEnrichment <- function(filepath,
   stopifnot("genome is required parameter, 
            please pass in either a BSgenome object or a Mart object."=
               is(genome, "BSgenome") | is(genome, "Mart"))
-  stopifnot("The 'times' parameter should be increased to a sufficient extent."=round(times*alpha,0) != 0)
+  stopifnot("The 'times' or 'alpha' parameter should be increased to a sufficient extent."=round(times*alpha,0) != 0)
   nPeak <- length(peaks)
   stopifnot("There is no peak, please check your data."=nPeak != 0)
   peakSeq <- getAllPeakSequence(peaks, upstream = upstream, downstream = downstream, genome = genome)
@@ -153,7 +153,7 @@ binomEnrichment <- function(forwardpattern, revcomp=TRUE, seqs){
   return(peakFreq)
 }
 
-permutationEnrichment <- function(forwardpattern, revcomp = TRUE, seqs, genome, backgroud = c("select.chr.randomly","shuffle"), times = 1000){
+permutationEnrichment <- function(forwardpattern, revcomp = TRUE, seqs, upstream = 0, downstream = 0, genome, backgroud = c("select.chr.randomly","shuffle"), chromosome=NULL, times = 1000, alpha = 0.05){
   forwardpattern.t <- translatePattern(forwardpattern)
   backwardpattern.t <- NULL
   backwardpattern <- NULL
@@ -169,7 +169,6 @@ permutationEnrichment <- function(forwardpattern, revcomp = TRUE, seqs, genome, 
   names(seqs$orig.sequence) <- do.call(paste, c(as.data.frame(seqs)[,1:3], sep="_"))
   inputSeq <- DNAStringSet(seqs$orig.sequence)
   candiChrom <- names(allseqLen >= max(seqWidth))
-  stopifnot("Increase 'times' or 'alpha' parameter."=round(times*alpha,0)!=0)
   stopifnot("The length of peak sequence should be less than the length of chromosomes"=
               all(seqWidth < allseqLen[as.character(seqnames(seqs)@values)]))
 

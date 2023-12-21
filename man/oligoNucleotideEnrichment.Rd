@@ -7,11 +7,13 @@
 oligoNucleotideEnrichment(
   filepath,
   format = "fasta",
+  revcomp = TRUE,
   peaks,
   upstream = 0,
   downstream = 0,
   genome,
-  methodBackground = c("selectChromRandomly", "shuffle"),
+  method = c("binom.test", "permutation.test"),
+  backgroud = c("select.chr.randomly", "shuffle"),
   chromosome = NULL,
   ...,
   times = 1000,
@@ -19,33 +21,33 @@ oligoNucleotideEnrichment(
 )
 }
 \arguments{
-\item{filepath}{A character vector containing the path to the file to read the patterns from.}
+\item{filepath}{The path to the file that contains the oligonucleotide pattern.}
 
-\item{format}{Either "fasta" (default) or "fastq".}
+\item{format}{The format of file containing the oligonucleotide pattern, either "fasta" (default) or "fastq".}
 
-\item{peaks}{GRanges containing the peaks.}
+\item{peaks}{A GRanges object containing the peaks.}
 
-\item{upstream}{upstream of the peak}
+\item{upstream}{The number of base pairs to expand the peak regions (upstream) when searching for oligonucleotide patterns. Default to 0.}
 
-\item{downstream}{downstream of the peak}
+\item{downstream}{The number of base pairs to expand the peak regions (downstream) when searching for oligonucleotide patterns. Default to 0.}
 
 \item{genome}{BSgenome object or mart object. Please refer to available.genomes in BSgenome package and useMart in bioMaRt package for details}
 
-\item{methodBackground}{The method to get the background of compared oligonucleotide. "selectChromRandomly" (default) is used to select background chromosomes from all chromosomesor, and "shuffle" will  shuffle the letters within input sequences with any k-let size.}
-
-\item{chromosome}{Specify which chromosome will be selected to randomly pick back ground sequences. Default is the chromosome in peaks. Note that this parameter is valid for 'selectChromRandomly' method.}
+\item{chromosome}{Specify which chromosome will be selected to randomly pick back ground sequences. Default is the chromosome in peaks. Note that this parameter is valid for 'select.chr.randomly' method.}
 
 \item{...}{could be parameters of function \code{\link[universalmotif]{shuffle_sequences}}}
 
-\item{times}{The times of getting background sequence for the null distribution, default is 1000}
+\item{times}{The times of permutation test, default is 1000}
 
-\item{alpha}{The significant level, default is 0.05}
+\item{alpha}{The significant level for permutation test, default is 0.05}
+
+\item{methodBackground}{The method to get the background of compared oligonucleotide. "select.chr.randomly" (default) is used to select background chromosomes from all chromosomesor, and "shuffle" will  shuffle the letters within input sequences with any k-let size.}
 }
 \value{
 A data frame with 5 columns as x (number of match of the pattern), n (total number of oligonucleotide with the same length of pattern in the input) and prop.background (the proportions of pattern in background sequence), binom.pvalue (p value for the null that probabilities of success equal certain given values ) and threshold(p value threshold with given times of sample or shuffle).
 }
 \description{
-Test if the oligonucleotide in given region of chromosomes is enriched or not.
+Test if given oligonucleotide patterns are enriched in peak regions or not.
 }
 \details{
 Please see \link[universalmotif]{shuffle_sequences} for the more information about 'shuffle' method.
@@ -57,12 +59,10 @@ peaks = GRanges(seqnames=c("chr17","chr3","chr12","chr8"),
                  IRanges(start=c(41275784,10076141,4654135,31024288),
                          end=c(41276382,10076732,4654728,31024996),
                          names=paste0("peak",1:4)))
-\dontrun{
 result <- oligoNucleotideEnrichment(filepath=filepath,
 peaks=peaks,
 genome=Hsapiens,
-methodBackground="selectChromRandomly")
-}
+method="binom.test")
 }
 \author{
 Junhui Li
