@@ -1,7 +1,7 @@
 CHANGES IN VERSION 3.37.2
 -------------------------
 
-    o export function oligoNucleotideEnrichment
+    o update summarizePatternInPeak function 
     
 CHANGES IN VERSION 3.37.1
 -------------------------
