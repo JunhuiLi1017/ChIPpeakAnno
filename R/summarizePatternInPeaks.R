@@ -577,7 +577,7 @@ getPosInSeqs <- function(thispattern, seq, revcomp = TRUE){
                                             "peakEnd","peakWidth","peakStrand")
     for (i in 1:dim(total)[2])
       total[,i] <- unlist(total[,i])
-    total$chr <- total$seqnames
+    total$motifChr <- total$peakChr
   }
   total
 }
